@@ -9,5 +9,6 @@ urlpatterns = [
     path('login_check/', views.login_check, name="login_check"),
     path('signup/', views.signup, name="signup"),
     path('storenote/', views.storenote, name="storenote"),
-    path('ajax/', views.ajax, name="ajax")
+    path('ajax/', views.ajax, name="ajax"),
+    path('logout/', views.logout, name="logout")
 ]
