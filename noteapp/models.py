@@ -5,7 +5,7 @@ import datetime
 class Notes(models.Model):
     user = models.CharField(max_length=64)
     heading = models.CharField(max_length=100)
-    notes = models.CharField(max_length=1000)
+    notes = models.TextField()
     date = models.DateField(default=datetime.date.today)
 
     def __str__(self):

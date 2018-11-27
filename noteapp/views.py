@@ -7,7 +7,7 @@ from .models import Notes
 
 
 def index(request):
-    print("in index")
+    #print("in index")
     if not request.user.is_authenticated:
         return render(request, "noteapp/login.html", {"message":None})
     notes = Notes.objects.filter(user=request.user)
@@ -18,7 +18,7 @@ def index(request):
         noteAsList.append(note.notes)
         noteAsList.append(note.date)
         context['notes'][note.heading] = noteAsList
-        print(context['notes'])
+        #print(context['notes'])
 
     return render(request,"noteapp/index.html", context)
 
@@ -39,7 +39,7 @@ def login_check(request):
     return HttpResponseRedirect(reverse("index"))
 
 def new_user(request):
-    print("in new_user")
+    #print("in new_user")
     if not request.user.is_authenticated:
         return render(request, "noteapp/new_user.html", {"message":"After Successfull Signup Redirected to login page!"})
     return HttpResponseRedirect(reverse("index"))
@@ -47,20 +47,20 @@ def new_user(request):
 def signup(request):
     if request.method=="POST":
         if request.user.is_authenticated:
-            print("user authenticated")
+            #print("user authenticated")
             return render(request, "noteapp/index.html", {"message":None})
         username = request.POST["username"]
         password = request.POST["password"]
         email = request.POST["email"]
         try:
-            print("in try")
+            #print("in try")
             userexist = User.objects.get(username=username)
         except User.DoesNotExist:
             user = User.objects.create_user(username=username, password=password, email=email)
             user.save()
-            print("user created")
+            #print("user created")
             auth_login(request, user)
-            print("user login")
+            #print("user login")
             return HttpResponseRedirect(reverse("index"))
         return render(request, "noteapp/new_user.html", {"message":"Username already exist."})
     return HttpResponseRedirect(reverse("index"))
@@ -82,7 +82,7 @@ def ajax(request):
     user = request.POST['user']
     heading = request.POST['heading']
     note = request.POST['note']
-    Notes.objects.filter(user=user, heading=heading, notes=note)[0].delete()
+    Notes.objects.filter(user=user, heading=heading)[0].delete()
 
     return HttpResponse("success")
 
