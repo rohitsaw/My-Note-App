@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Notes
+from django.core.exceptions import SuspiciousOperation
 
 
 def index(request):
@@ -64,7 +65,7 @@ def signup(request):
             return HttpResponseRedirect(reverse("index"))
         return render(request, "noteapp/new_user.html", {"message":"Username already exist."})
     return HttpResponseRedirect(reverse("index"))
-    
+
 
 def storenote(request):
     if not (request.user.is_authenticated or request.method=="POST"):
@@ -72,9 +73,13 @@ def storenote(request):
     heading = request.POST["heading"]
     notes = request.POST["note"]
     user = request.user
-    p = Notes(heading=heading, user=user, notes=notes)
-    p.save()
-    return HttpResponseRedirect(reverse("index"))
+    try:
+        notesexist = Notes.objects.get(heading=heading, user=user)
+    except Notes.DoesNotExist:
+        p = Notes(heading=heading, user=user, notes=notes)
+        p.save()
+        return HttpResponseRedirect(reverse("index"))
+    raise SuspiciousOperation("Invalid request; Same heading already exist.")
 
 def ajax(request):
     if not (request.user.is_authenticated and request.method=="POST" and request.is_ajax()):
@@ -91,4 +96,3 @@ def logout(request):
         auth_logout(request)
         return HttpResponseRedirect(reverse("index"))
     return HttpResponseRedirect(reverse("index"))
-    
