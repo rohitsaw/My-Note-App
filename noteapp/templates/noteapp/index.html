@@ -1,14 +1,19 @@
 <!Doctype html>
 <html>
     <head>
+            {% load static %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>NoteApp</title>
+
+        <!-- Bootstrap and jquery cdn -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
         <!-- Link for font awesome library -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Chicle|Lato|Monoton" rel="stylesheet">
+
     </head>
     <body>
 
@@ -122,37 +127,9 @@
                     </div>
                 </footer>
         </div>
-
-    <!-- jquery code -->
-        <script>
-                $(".delete").click(function(e){
-                alert("This item will be permanentl deleted.Click ok to proceed.");
-                    let heading = $(this).attr("data-heading");
-                    let note = $(this).attr("data-notes");
-                    let user = $(this).attr("data-user")
-                    console.log(heading)
-                    console.log(note)
-                    console.log(user)
-                $.ajax({
-                    type: "POST",
-                    url: '/ajax/',
-                    data: {
-                        'csrfmiddlewaretoken' :$('[name=csrfmiddlewaretoken]').val(),
-                        'heading' : heading,
-                        'note' : note,
-                        'user' : user
-                    },
-                    success: function (data) {
-                      if (data=="success") {
-                          location.reload();
-                      }
-                      else{
-                          alert("something went wrong");
-                      }
-                     }
-                  });
-
-                });
-        </script>
     </body>
+
+    <!-- javascript files for deleteing notes -->
+    <script src="{% static 'noteapp/index.js' %}"></script>
+
 </html>

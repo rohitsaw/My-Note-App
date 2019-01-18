@@ -9,7 +9,7 @@
     <body>
         <div class="card">
             {% if message %}
-                <h3 class="card-heading" style="text-align:center;">{{ message }}</h3>
+                <h2 class="card-header" style="text-align:center;">{{ message }}</h2>
             {% endif %}
             <form class="card-body" action="{% url 'signup' %}" method="post">
                 {% csrf_token %}

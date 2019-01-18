@@ -8,7 +8,9 @@ from django.core.exceptions import SuspiciousOperation
 
 
 def index(request):
-    #print("in index")
+    '''
+    Home page
+    '''
     if not request.user.is_authenticated:
         return render(request, "noteapp/login.html", {"message":None})
     notes = Notes.objects.filter(user=request.user)
@@ -24,11 +26,17 @@ def index(request):
     return render(request,"noteapp/index.html", context)
 
 def login(request):
+    '''
+    If user is not logIN then render login page
+    '''
     if not request.user.is_authenticated:
         return render(request, "noteapp/login.html", {"message":None})
     return HttpResponseRedirect(reverse("index"))
 
 def login_check(request):
+    '''
+    Authenticate the user
+    '''
     if request.method=="POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -40,12 +48,17 @@ def login_check(request):
     return HttpResponseRedirect(reverse("index"))
 
 def new_user(request):
-    #print("in new_user")
+    '''
+    Render Sign Up page
+    '''
     if not request.user.is_authenticated:
-        return render(request, "noteapp/new_user.html", {"message":"After Successfull Signup Redirected to login page!"})
+        return render(request, "noteapp/new_user.html", {"message":"After Successfull Signup , login takes automatically!"})
     return HttpResponseRedirect(reverse("index"))
 
 def signup(request):
+    '''
+    Authenticate the signup process and return home page
+    '''
     if request.method=="POST":
         if request.user.is_authenticated:
             #print("user authenticated")
@@ -68,6 +81,9 @@ def signup(request):
 
 
 def storenote(request):
+    '''
+    Save the newly created notes
+    '''
     if not (request.user.is_authenticated or request.method=="POST"):
         return render(request, "noteapp/login.html", {"msg":"Login First"})
     heading = request.POST["heading"]
@@ -82,6 +98,9 @@ def storenote(request):
     raise SuspiciousOperation("Invalid request; Same heading already exist.")
 
 def ajax(request):
+    '''
+    Delete the existing one notes
+    '''
     if not (request.user.is_authenticated and request.method=="POST" and request.is_ajax()):
         return render(request, "noteapp/login.html", {"msg":"Login First"})
     user = request.POST['user']
@@ -92,6 +111,9 @@ def ajax(request):
     return HttpResponse("success")
 
 def logout(request):
+    '''
+    Logout the page
+    '''
     if (request.method=="POST") and (request.user.is_authenticated):
         auth_logout(request)
         return HttpResponseRedirect(reverse("index"))
